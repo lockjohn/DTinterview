@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import EmployeeList from './EmployeeList';
+import EmployeeList from './Components/EmployeeList';
 
 class App extends Component {
   constructor(props) {
