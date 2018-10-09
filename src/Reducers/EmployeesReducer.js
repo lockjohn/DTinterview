@@ -1,7 +1,6 @@
 import {
   RECEIVE_EMPLOYEES_LIST,
   RECEIVE_EMPLOYEE_PAGE,
-  RECEIVE_EMPLOYEE,
   
 } from "../Actions/employee_actions";
 

@@ -11,6 +11,8 @@ const getDepartmentEmployees = createSelector(
                 return employees
             case 'SHOW_SELECTED':
                 return employees.filter(worker => worker.department === filter.selected);
+            default:
+                return employees;
         }
     }
 )

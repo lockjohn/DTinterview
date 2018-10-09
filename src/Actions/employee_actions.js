@@ -38,8 +38,6 @@ export const receiveEmployee = employee => {
 
 export const requestEmployeesList = perPage => dispatch => {
     return APIUtil.fetchEmployeesByPerPage(perPage).then(list => {
-        console.log('got here')
-        console.log(receiveEmployeesList(list))
         dispatch(receiveEmployeesList(list));
     });
 };

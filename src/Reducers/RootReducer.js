@@ -4,7 +4,7 @@ import {combineReducers} from 'redux';
 
 const rootReducer = combineReducers({
     employees: EmployeesReducer,
-    filter: FilterReducer,
+    selectedFilter: FilterReducer,
 });
 
 export default rootReducer;
