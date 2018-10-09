@@ -1,25 +1,36 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+import EmployeeList from './EmployeeList';
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      employees: null,
+    };
+  }
+
+  fetchEmployees (number = 25) {
+    fetch(`https://dt-interviews.appspot.com/?per_page=${number}`)
+    .then( response => {
+      return response.json();
+    }).then( jsonReponse => {
+      this.setState({ employees: jsonReponse })
+    });
+  }
+
+  componentDidMount() {
+    this.fetchEmployees();
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          Employees
         </header>
+          <EmployeeList employees={this.state.employees} />
       </div>
     );
   }
