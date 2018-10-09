@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import EmployeeList from './Components/EmployeeList';
+import EmployeeListContainer from './Components/EmployeeListContainer';
 
 class App extends Component {
   constructor(props) {
@@ -11,26 +11,13 @@ class App extends Component {
     };
   }
 
-  fetchEmployees (number = 25) {
-    fetch(`https://dt-interviews.appspot.com/?per_page=${number}`)
-    .then( response => {
-      return response.json();
-    }).then( jsonReponse => {
-      this.setState({ employees: jsonReponse })
-    });
-  }
-
-  componentDidMount() {
-    this.fetchEmployees();
-  }
-
   render() {
     return (
       <div className="App">
         <header className="App-header">
           Employees
         </header>
-          <EmployeeList employees={this.state.employees} />
+          <EmployeeListContainer employees={this.state.employees} />
       </div>
     );
   }

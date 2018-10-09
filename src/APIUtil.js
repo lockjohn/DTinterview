@@ -1,35 +1,27 @@
 export const fetchEmployeesByPerPage = (perPage = 100) => {
-    fetch(`https://dt-interviews.appspot.com/?per_page=${perPage}`)
+    return fetch(`https://dt-interviews.appspot.com/?per_page=${perPage}`)
         .then(response => {
             return response.json();
-        }).then(jsonReponse => {
-            this.setState({ employees: jsonReponse })
         });
 }
 
 export const fetchEmployeesByPage = (page = 1) => {
-  fetch(`https://dt-interviews.appspot.com/?page=${page}`)
+  return fetch(`https://dt-interviews.appspot.com/?page=${page}`)
     .then(response => {
       return response.json();
-    })
-    .then(jsonReponse => {
-      this.setState({ employees: jsonReponse });
     });
 };
 
 export const fetchEmployee = (id) => {
-    fetch(`https://dt-interviews.appspot.com/${id}`)
+    return fetch(`https://dt-interviews.appspot.com/${id}`)
         .then(response => {
             return response.json();
-        })
-        .then(jsonReponse => {
-            this.setState({ employees: jsonReponse });
         });
 };
 
 
 export const createNewEmployee = (data) => {
-    fetch('https://dt-interviews.appspot.com/', {
+   return fetch('https://dt-interviews.appspot.com/', {
         method: 'POST', 
         body: JSON.stringify(data), 
         headers: {
