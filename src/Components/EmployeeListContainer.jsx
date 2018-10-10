@@ -7,7 +7,7 @@ import { changeFilter, clearFilter } from '../Actions/filter_action';
 const msp = (state) => {
     return {
         employees: getDepartmentEmployees(state),
-        filter: state.filter
+        filter: state.selectedFilter
     }
 }
 

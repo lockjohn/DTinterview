@@ -1,18 +1,22 @@
 import React from "react";
 import EmployeeListItem from "./EmployeeListItem";
-import { requestEmployeesPage } from "../Actions/employee_actions";
+
+
 
 class EmployeeList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       page: "",
-      recordsNumber: ""
+      recordsNumber: "",
+      value: this.props.filter,
     };
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handlePageSubmit = this.handlePageSubmit.bind(this);
     this.handleNumberChange = this.handleNumberChange.bind(this);
     this.handleNumberSubmit = this.handleNumberSubmit.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
+    this.handleSelectSubmit = this.handleSelectSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -44,65 +48,110 @@ class EmployeeList extends React.Component {
       alert("The range of pages is 1 - 35,000");
     }
   }
+  //select dept filter handlers
+    handleSelectChange(event) {
+        this.setState({ value: event.target.value });
+    }
+
+    handleSelectSubmit(event) {
+        event.preventDefault();
+        console.log(this.state.value);
+        this.state.value === 'none' ? this.props.clearFilter() : this.props.changeFilter(this.state.value)
+    }
+
+    //setting keyboard controllable focus for list elements
+    handleClick (e) {
+        const list = document.getElementById('list');
+        list.firstChild.focus();
+    }
+
+    handleFocus (e) {
+      const element = e.target;
+      element.addEventListener('keydown', (e) => this.arrowFunction(e))
+    }
+
+    arrowFunction (event) {
+        const el = event.target
+        switch (event.key) {
+            case 'ArrowDown':    
+                el.nextSibling.focus();
+                break;
+            case 'ArrowUp':
+                el.previousSibling.focus();
+                break;
+            case 'Enter':
+            //enter - need to trigger modal, aka activate link
+                break;
+            default:
+                break;
+        }
+    }
+
+    //render-------------------------------------------------------
+    //-------------------------------------------------------------
 
   render() {
     const { employees } = this.props;
+    const departments = ["POLICE", "GENERAL SERVICES",
+          "WATER MGMNT", "OEMC",
+          "CITY COUNCIL", "AVIATION",
+          "STREETS & SAN", "FIRE",
+          "FAMILY & SUPPORT",
+          "PUBLIC LIBRARY", "TRANSPORTN",
+          "MAYOR'S OFFICE", "HEALTH",
+          "BUSINESS AFFAIRS", "LAW",
+          "FINANCE", "CULTURAL AFFAIRS",
+          "COMMUNITY DEVELOPMENT",
+          "PROCUREMENT", "BUILDINGS",]
 
     if (!employees) {
       return <div> loading...</div>;
     }
 
-    return (
-      <div>
-        {/* page number search form */}
+    return <div>
+        {/* page number display form */}
         <form onSubmit={this.handlePageSubmit}>
           <label>
             Navigate to a page:
-            <input
-              type="text"
-              value={this.state.page}
-              onChange={this.handlePageChange}
-            />
+            <input type="text" value={this.state.page} onChange={this.handlePageChange} />
           </label>
           <input type="submit" value="Submit" />
         </form>
-        {/* number of records change form */}
+        {/* number of records to list form */}
         <form onSubmit={this.handleNumberSubmit}>
           <label>
             Change the number of records displayed:
-            <input
-              type="text"
-              value={this.state.recordsNumber}
-              onChange={this.handleNumberChange}
-            />
+            <input type="text" value={this.state.recordsNumber} onChange={this.handleNumberChange} />
           </label>
           <input type="submit" value="Submit" />
         </form>
         {/* filter by selection */}
-        <form onSubmit={this.handleSelectionSubmit}>
+        <form onSubmit={this.handleSelectSubmit}>
           <label>
-            Pick your favorite flavor:
-            <select value={this.state.value} onChange={this.handleChange}>
-              <option value="grapefruit">Grapefruit</option>
-              <option value="lime">Lime</option>
-              <option value="coconut">Coconut</option>
-              <option value="mango">Mango</option>
+            Filter by Employee Department:
+            <select value={this.state.value} onChange={this.handleSelectChange}>
+              <option value="none">None</option>
+              {departments.map((department, i) => (
+                <option key={i} value={department}>
+                  {department}
+                </option>
+              ))}
             </select>
           </label>
           <input type="submit" value="Submit" />
         </form>
-        <ul>
-          {employees.map(employee => (
-            
-                <EmployeeListItem key={employee.id}//use id for key for each item
-                name={employee.name}
-                title={employee.job_titles}
-              />
-            
-          ))}
+
+        <ul id="list" tabIndex="0" onClick={e => this.handleClick(e)}>
+          {employees.map(employee => 
+          <li tabIndex="-1" 
+          key={employee.id}
+          onFocus={(e)=> this.handleFocus(e)}>
+              {" "}
+              <EmployeeListItem //use id for key for each item
+                name={employee.name} title={employee.job_titles} />
+            </li>)}
         </ul>
-      </div>
-    );
+      </div>;
   }
 }
 
