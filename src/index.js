@@ -5,7 +5,7 @@ import App from "./App";
 import configureStore from "./Store/store";
 
 import { Provider } from "react-redux";
-import { HashRouter } from "react-router-dom";
+
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -16,9 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const root = document.getElementById("root");
   ReactDOM.render(
     <Provider store={store}>
-      <HashRouter>
         <App />
-      </HashRouter>
     </Provider>,
     root
   );
