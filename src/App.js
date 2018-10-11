@@ -1,26 +1,22 @@
 import React, { Component } from 'react';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import './App.css';
 
 import EmployeeListContainer from './Components/EmployeeListContainer';
+import EmployeeShowContainer from './Components/EmployeeShowContainer';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      employees: null,
-    };
-  }
-
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          Employees
-        </header>
-          <EmployeeListContainer employees={this.state.employees} />
-      </div>
-    );
+    <div className="App">
+        <header className="App-header">Employees</header>
+        <Switch>
+          <Route exact path="/:Id" component={EmployeeShowContainer} />
+          <Route path="/" component={EmployeeListContainer} />
+        </Switch>
+        
+    </div>);
   }
 }
 
-export default App;
+export default withRouter(App);

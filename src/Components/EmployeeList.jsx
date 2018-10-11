@@ -11,6 +11,8 @@ class EmployeeList extends React.Component {
       recordsNumber: "",
       value: this.props.filter,
     };
+
+    //this binders for handle fx
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handlePageSubmit = this.handlePageSubmit.bind(this);
     this.handleNumberChange = this.handleNumberChange.bind(this);
@@ -22,7 +24,9 @@ class EmployeeList extends React.Component {
   componentDidMount() {
     this.props.requestEmployeesList();
   }
-  //page number form handlers
+  //page number form handlers-------------------------------------------------------
+  //-------------------------------------------------------------
+
   handlePageChange(event) {
     this.setState({ page: event.target.value });
   }
@@ -35,7 +39,9 @@ class EmployeeList extends React.Component {
       alert("The range of pages is 1 - 321");
     }
   }
-  //number of records form handlers
+  //number of records form handlers-------------------------------------------------------
+  //-------------------------------------------------------------
+
   handleNumberChange(event) {
     this.setState({ recordsNumber: event.target.value });
   }
@@ -48,72 +54,95 @@ class EmployeeList extends React.Component {
       alert("The range of pages is 1 - 35,000");
     }
   }
-  //select dept filter handlers
-    handleSelectChange(event) {
-        this.setState({ value: event.target.value });
-    }
+  //select dept filter handlers-------------------------------------------------------
+  //-------------------------------------------------------------
 
-    handleSelectSubmit(event) {
-        event.preventDefault();
-        console.log(this.state.value);
-        this.state.value === 'none' ? this.props.clearFilter() : this.props.changeFilter(this.state.value)
-    }
+  handleSelectChange(event) {
+    this.setState({ value: event.target.value });
+  }
 
-    //setting keyboard controllable focus for list elements
-    handleClick (e) {
-        const list = document.getElementById('list');
-        list.firstChild.focus();
-    }
+  handleSelectSubmit(event) {
+    event.preventDefault();
+    console.log(this.state.value);
+    this.state.value === "none"
+      ? this.props.clearFilter()
+      : this.props.changeFilter(this.state.value);
+  }
 
-    handleFocus (e) {
-      const element = e.target;
-      element.addEventListener('keydown', (e) => this.arrowFunction(e))
-    }
+  //setting keyboard controllable focus for list elements---------------------------------
+  //-------------------------------------------------------------
 
-    arrowFunction (event) {
-        const el = event.target
-        switch (event.key) {
-            case 'ArrowDown':    
-                el.nextSibling.focus();
-                break;
-            case 'ArrowUp':
-                el.previousSibling.focus();
-                break;
-            case 'Enter':
-            //enter - need to trigger modal, aka activate link
-                break;
-            default:
-                break;
-        }
-    }
+  handleClick(e) {
+    const list = document.getElementById("list");
+    list.firstChild.focus();
+  }
 
-    //render-------------------------------------------------------
-    //-------------------------------------------------------------
+  handleFocus(e) {
+    const element = e.target;
+    element.addEventListener("keydown", e => this.keyFunction(e));
+  }
+
+  keyFunction(event) {
+    const el = event.target;
+
+    switch (event.key) {
+      case "ArrowDown":
+        el.nextSibling.focus();
+        break;
+      case "ArrowUp":
+        el.previousSibling.focus();
+        break;
+      case "Enter":
+        this.props.history.push(`/${el.dataset.id}`)
+        break;
+      default:
+        break;
+    }
+  }
+
+  //render-------------------------------------------------------
+  //-------------------------------------------------------------
 
   render() {
     const { employees } = this.props;
-    const departments = ["POLICE", "GENERAL SERVICES",
-          "WATER MGMNT", "OEMC",
-          "CITY COUNCIL", "AVIATION",
-          "STREETS & SAN", "FIRE",
-          "FAMILY & SUPPORT",
-          "PUBLIC LIBRARY", "TRANSPORTN",
-          "MAYOR'S OFFICE", "HEALTH",
-          "BUSINESS AFFAIRS", "LAW",
-          "FINANCE", "CULTURAL AFFAIRS",
-          "COMMUNITY DEVELOPMENT",
-          "PROCUREMENT", "BUILDINGS",]
+    const departments = [
+      "POLICE",
+      "GENERAL SERVICES",
+      "WATER MGMNT",
+      "OEMC",
+      "CITY COUNCIL",
+      "AVIATION",
+      "STREETS & SAN",
+      "FIRE",
+      "FAMILY & SUPPORT",
+      "PUBLIC LIBRARY",
+      "TRANSPORTN",
+      "MAYOR'S OFFICE",
+      "HEALTH",
+      "BUSINESS AFFAIRS",
+      "LAW",
+      "FINANCE",
+      "CULTURAL AFFAIRS",
+      "COMMUNITY DEVELOPMENT",
+      "PROCUREMENT",
+      "BUILDINGS"
+    ];
 
     if (!employees) {
       return <div> loading...</div>;
     }
 
-    return <div>
+    return (
+      <div>
         {/* page number display form */}
         <form onSubmit={this.handlePageSubmit}>
           <label>
             Navigate to a page:
-            <input type="text" value={this.state.page} onChange={this.handlePageChange} />
+            <input
+              type="text"
+              value={this.state.page}
+              onChange={this.handlePageChange}
+            />
           </label>
           <input type="submit" value="Submit" />
         </form>
@@ -121,7 +150,11 @@ class EmployeeList extends React.Component {
         <form onSubmit={this.handleNumberSubmit}>
           <label>
             Change the number of records displayed:
-            <input type="text" value={this.state.recordsNumber} onChange={this.handleNumberChange} />
+            <input
+              type="text"
+              value={this.state.recordsNumber}
+              onChange={this.handleNumberChange}
+            />
           </label>
           <input type="submit" value="Submit" />
         </form>
@@ -142,16 +175,22 @@ class EmployeeList extends React.Component {
         </form>
 
         <ul id="list" tabIndex="0" onClick={e => this.handleClick(e)}>
-          {employees.map(employee => 
-          <li tabIndex="-1" 
-          key={employee.id}
-          onFocus={(e)=> this.handleFocus(e)}>
-              {" "}
-              <EmployeeListItem //use id for key for each item
-                name={employee.name} title={employee.job_titles} />
-            </li>)}
+          {employees.map((employee, idx) => (
+            <li
+              tabIndex="-1"
+              data-id={employee.id}
+              key={employee.id}
+              onFocus={e => this.handleFocus(e)}
+            >
+              <EmployeeListItem 
+                name={employee.name}
+                title={employee.job_titles}
+              />
+            </li>
+          ))}
         </ul>
-      </div>;
+      </div>
+    );
   }
 }
 
