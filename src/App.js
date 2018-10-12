@@ -1,7 +1,8 @@
 import React from 'react';
 import Modal from 'react-modal';
 import './App.css';
-import { createEmployee } from './Actions/employee_actions';
+import { createNewEmployee } from './APIUtil';
+
 
 import EmployeeListContainer from './Components/EmployeeListContainer';
 
@@ -11,27 +12,31 @@ class App extends React.Component {
     super(props);
     this.state = {
       showModal: false,
-      employee: {
         name: '',
         job_titles: '',
         department: '',
         employee_annual_salary: '',
-      }
     }
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
   }
 
   update(field) {
     return e => {
-      this.setState({ employee: { [field]: e.target.value } });
+      this.setState({ [field]: e.target.value });
     };
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    createEmployee(this.state.employee);
+    createNewEmployee({
+      name: this.state.name,
+      job_titles: this.state.job_titles,
+      department: this.state.department,
+      employee_annual_salary: this.state.employee_annual_salary,
+    });
   }
 
   handleClick(e) {
@@ -50,25 +55,28 @@ class App extends React.Component {
           isOpen={this.state.showModal}
           onRequestClose={this.handleClick}
         >
-          <form onSubmit={this.handlePageSubmit}>
+          <form >
             <label>Name
-          <input type="text" onChange={this.update('name')} value={this.state.employee.name} />
+          <input type="text" onChange={this.update('name')} value={this.state.name} />
             </label>
             <label>Title
-          <input type="text" onChange={this.update('job_titles')} value={this.state.employee.job_titles} />
+          <input type="text" onChange={this.update('job_titles')} value={this.state.job_titles} />
             </label>
             <label>Department
-          <input type="text" onChange={this.update('department')} value={this.state.employee.department} />
+          <input type="text" onChange={this.update('department')} value={this.state.department} />
             </label>
             <label>Salary
-          <input type="text" onChange={this.update('employee_annual_salary')} value={this.state.employee.employee_annual_salary} />
+          <input type="text" onChange={this.update('employee_annual_salary')} value={this.state.employee_annual_salary} />
             </label>
 
-            <button>Create New Employee</button>
+            <button onClick={this.handleSubmit}>Create New Employee</button>
           </form>
         </Modal>
       </div>);
   }
 }
+
+
+
 
 export default App;

@@ -24,6 +24,7 @@ export const createNewEmployee = (data) => {
    return fetch('https://dt-interviews.appspot.com/', {
         method: 'POST', 
         body: JSON.stringify(data), 
+        credentials: "same-origin",
         headers: {
             'Content-Type': 'application/json'
         }

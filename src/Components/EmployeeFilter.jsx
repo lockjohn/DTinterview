@@ -17,7 +17,6 @@ class EmployeeFilter extends React.Component {
 
     handleSelectSubmit(event) {
         event.preventDefault();
-        console.log(this.state.value);
         this.state.value === "none"
             ? this.props.clearFilter()
             : this.props.changeFilter(this.state.value);
