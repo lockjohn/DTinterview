@@ -14,7 +14,7 @@ class EmployeeList extends React.Component {
       row: null,
       idx: null,
     };
-
+    this.fx = (e) => this.modalKeyFx(e);
     this.setRow = this.setRow.bind(this);
     this.handleCloseModal = this.handleCloseModal.bind(this);
     this.handleAfterOpenFunc = this.handleAfterOpenFunc.bind(this);
@@ -42,14 +42,13 @@ class EmployeeList extends React.Component {
   //-------------------------------------------------------------
 
   handleFocus(e) {
-    console.log('li handle focus fired', e)
     const element = e.target;
-    element.addEventListener("keydown", e => this.keyFunction(e), { once: true });
+    element.addEventListener("keydown", e => this.keyFunction(e));
   }
 
   keyFunction(event) {
     const el = event.target; // == li from the list of employees
-    console.log(el);
+  
     switch (event.key) {
       case "ArrowDown":
         if (el.nextSibling != null) {
@@ -65,24 +64,25 @@ class EmployeeList extends React.Component {
         const worker = this.props.employees[parseInt(el.dataset.idx)]
         this.setRow(worker);
         this.setIndex(parseInt(el.dataset.idx));
-        el.removeEventListener("keydown", e => this.keyFunction(e), true)
+        // el.removeEventListener("keydown", e => this.keyFunction(e), true)
         break;
       default:
         break;
     }
   }
+  
 
   handleAfterOpenFunc() {
-    const parent = document.getElementsByTagName("body").item(0);
-    const modal = parent.lastChild;
-    modal.addEventListener("keydown", e => this.modalKeyFx(e));//problem
+   const modal = document.getElementsByTagName("body").item(0).lastChild.previousSibling;
+    modal.addEventListener("keydown", this.fx, false);//problem
   }
 
   handleCloseModal() {
+
+    const modal = document.getElementsByTagName("body").item(0).lastChild.previousSibling;
+    modal.removeEventListener("keydown", this.fx, false);
     this.setState({ row: null })
-    const parent = document.getElementsByTagName("body").item(0);
-    const modal = parent.lastChild;
-    modal.removeEventListener("keydown", e => this.modalKeyFx(e));
+    document.querySelector(`[data-idx='${this.state.idx}']`).focus();
   }
 
 
@@ -94,10 +94,8 @@ class EmployeeList extends React.Component {
     switch (event.key) {
       case "ArrowDown":
         worker = array[idx + 1]
-        console.log(idx)
         this.setRow(worker);
         this.setIndex(idx + 1);
-        console.log(this.state.idx)
         break;
       case "ArrowUp":
         worker = array[idx - 1]
@@ -121,7 +119,7 @@ class EmployeeList extends React.Component {
     if (!employees) {
       return <div> loading...</div>;
     }
-    
+
     if (row != null) {
       modaldiv = <div
         tabIndex="0"
@@ -153,7 +151,8 @@ class EmployeeList extends React.Component {
             <div className="employee-list-item">
               <span><p
                 onClick={() => {
-                  this.setBoth(employee, idx);
+                  this.setRow(employee);
+                  this.setIndex(idx);
                 }}
               >name: {employee.name}</p><p> title: {employee.job_titles}</p></span>
             </div>
